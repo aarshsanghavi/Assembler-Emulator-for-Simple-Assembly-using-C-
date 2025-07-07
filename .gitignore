@@ -1,0 +1,11 @@
+# Ignore compiled binaries
+*.exe
+*.o
+*.log
+*.lst
+
+# Ignore temporary files
+__pycache__/
+*.pyc
+.vscode/
+.venv/

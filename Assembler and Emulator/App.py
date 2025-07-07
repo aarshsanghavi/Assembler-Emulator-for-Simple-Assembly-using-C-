@@ -3,49 +3,51 @@ import subprocess
 import os
 import tempfile
 
-st.set_page_config(layout="wide")
-st.title("🛠️ Simple Assembler + Emulator Interface")
+st.set_page_config(page_title="Assembler & Emulator Interface", layout="wide")
+st.title("Assembler and Emulator Interface")
 
-ASSEMBLER_PATH = "Mainassembler.exe"
-EMULATOR_PATH = "Mainemulator.exe"
+ASSEMBLER_PATH = os.path.join(os.path.dirname(__file__), "Mainassembler.exe")
+EMULATOR_PATH = os.path.join(os.path.dirname(__file__), "Mainemulator.exe")
 
-# ──────────────── STEP 1 ────────────────
-st.header("📄 Upload .asm file (for Assembly)")
+# ------------------- STEP 1: Assemble -------------------
+st.header("Step 1: Upload and Assemble .asm file")
 
-uploaded_asm = st.file_uploader("Upload your `.asm` file", type=["asm"])
-
+uploaded_asm = st.file_uploader("Upload an `.asm` file", type=["asm"])
 if uploaded_asm:
+    st.markdown(f"**Selected file:** `{uploaded_asm.name}` ({uploaded_asm.size} bytes)")
+
     with tempfile.TemporaryDirectory() as tmpdir:
-        st.text(f"Temp dir path (Assembler): {tmpdir}")
         asm_path = os.path.join(tmpdir, uploaded_asm.name)
         with open(asm_path, "wb") as f:
             f.write(uploaded_asm.read())
 
-        base_name = os.path.splitext(os.path.basename(asm_path))[0]
+        base_name = os.path.splitext(uploaded_asm.name)[0]
 
         if st.button("Assemble"):
-            st.subheader("Assembler Output:")
+            st.subheader("Assembler Output")
             try:
                 result = subprocess.run(
-                    [ASSEMBLER_PATH, os.path.basename(asm_path)],
+                    [ASSEMBLER_PATH, uploaded_asm.name],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     text=True,
                     cwd=tmpdir
                 )
-
                 st.code(result.stdout + result.stderr)
 
+                # Show .log
                 log_path = os.path.join(tmpdir, base_name + ".log")
                 if os.path.exists(log_path):
                     with open(log_path, encoding='utf-8', errors='ignore') as f:
-                        st.text_area("Log (.log):", f.read(), height=150)
+                        st.text_area(".log file", f.read(), height=150)
 
+                # Show .lst
                 lst_path = os.path.join(tmpdir, base_name + ".lst")
                 if os.path.exists(lst_path):
                     with open(lst_path, encoding='utf-8', errors='ignore') as f:
-                        st.text_area("Listing (.lst):", f.read(), height=250)
+                        st.text_area(".lst file", f.read(), height=250)
 
+                # Save .o file in session state
                 o_path = os.path.join(tmpdir, base_name + ".o")
                 if os.path.exists(o_path):
                     st.success(f"Object file created: {base_name}.o")
@@ -57,13 +59,11 @@ if uploaded_asm:
             except Exception as e:
                 st.error(f"Assembler failed: {e}")
 
-# ──────────────── STEP 2 ────────────────
-st.header("Upload or Use .o File for Emulator")
+# ------------------- STEP 2: Emulator -------------------
+st.header("Step 2: Upload or Use .o File for Emulation")
 
-uploaded_obj = st.file_uploader("Upload your `.o` object file (optional)", type=["o"])
-cmd = st.selectbox("Choose Emulator Command", [
-    "-run", "-t", "-dump", "-reg", "-read", "-write", "-isa"
-])
+uploaded_obj = st.file_uploader("Upload `.o` object file (optional)", type=["o"])
+cmd = st.selectbox("Choose emulator command", ["-run", "-t", "-dump", "-reg", "-read", "-write", "-isa"])
 
 if uploaded_obj or 'o_file_content' in st.session_state:
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -87,13 +87,11 @@ if uploaded_obj or 'o_file_content' in st.session_state:
 
                 full_output = result.stdout + result.stderr
 
-                st.subheader("Raw Emulator Output:")
+                st.subheader("Emulator Output")
                 st.code(full_output)
 
                 if cmd == "-run":
-                    init_dump = []
-                    final_dump = []
-                    regs = []
+                    init_dump, final_dump, regs = [], [], []
                     section = None
 
                     for line in full_output.splitlines():
