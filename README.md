@@ -4,29 +4,28 @@ This project implements a custom two-pass assembler and an emulator (virtual CPU
 
 ---
 
-## 🔧 Features
+##  Features
 
-- ✅ Two-pass assembler with label resolution and symbol table generation
-- ✅ Supports decimal, octal, and hexadecimal numbers
-- ✅ Emits `.o` (binary), `.lst` (listing), and `.log` (errors/warnings)
-- ✅ Emulator executes real instruction flow with branching, arithmetic, and stack support
-- ✅ Read and write memory operations are traced and visualized
-- ✅ Streamlit UI for uploading `.s` files and seeing assembled output, decoded instructions, and final memory/register state
+-  Two-pass assembler with label resolution and symbol table generation
+-  Supports decimal, octal, and hexadecimal numbers
+-  Emits `.o` (binary), `.lst` (listing), and `.log` (errors/warnings)
+-  Emulator executes real instruction flow with branching, arithmetic, and stack support
+-  Read and write memory operations are traced and visualized
+-  Streamlit UI for uploading `.s` files and seeing assembled output, decoded instructions, and final memory/register state
 
 ---
 
-## 🖥️ Usage
+## Usage
 
-### Assemble a program
-```bash
+Assemble a Program
+
 g++ assembler/assembler.cpp -o assembler
 ./assembler test_programs/example.s
-Run the emulator
-bash
-Copy
-Edit
+
+
+Run the Emulator
 g++ emulator/emulator.cpp -o emulator
-./emulator example.o -run
+./emulator example.o -run        # run the full program
 ./emulator example.o -dump       # memory dump
 ./emulator example.o -reg        # show registers
 ./emulator example.o -read       # show all memory reads
@@ -35,9 +34,8 @@ UI (optional)
 bash
 Copy
 Edit
-cd ui
-streamlit run run_ui.py
-📁 Project Structure
+streamlit run ui/run_ui.py
+Project Structure
 graphql
 Copy
 Edit
@@ -57,7 +55,7 @@ project_root/
 │
 ├── README.md
 └── .gitignore
-🧪 Example
+Example Program
 asm
 Copy
 Edit
@@ -72,25 +70,18 @@ stl 0
 ldl 5
 stl 1
 HALT
-✅ Output Files
+Output Files
 example.o: Binary object file (32-bit instructions)
 
 example.lst: Instruction listing with addresses
 
 example.log: Any warnings/errors encountered
 
-🛠️ Requirements
+Requirements
 C++17 compiler
 
 Python 3.8+ (for Streamlit UI)
 
-📜 License
+License
 MIT License
 
-yaml
-Copy
-Edit
-
----
-
-Let me know if you want the same but customized for your own name/repo link.
