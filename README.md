@@ -1,44 +1,34 @@
-# Assembler and Emulator for a Simple Assembly Language
+# Simple Assembler and Emulator
 
-This project implements a custom two-pass assembler and an emulator (virtual CPU) for a toy assembly language with 18+ unique instructions, supporting branching, stack operations, and arithmetic.
+This project implements a full toolchain (assembler + emulator) for a custom 32-bit instruction set architecture, including a Streamlit UI for interaction and visualization.
 
----
+## Assemble a Program
 
-##  Features
-
--  Two-pass assembler with label resolution and symbol table generation
--  Supports decimal, octal, and hexadecimal numbers
--  Emits `.o` (binary), `.lst` (listing), and `.log` (errors/warnings)
--  Emulator executes real instruction flow with branching, arithmetic, and stack support
--  Read and write memory operations are traced and visualized
--  Streamlit UI for uploading `.s` files and seeing assembled output, decoded instructions, and final memory/register state
-
----
-
-## Usage
-
-Assemble a Program
-
+```bash
 g++ assembler/assembler.cpp -o assembler
 ./assembler test_programs/example.s
+```
 
+## Run the Emulator
 
-Run the Emulator
+```bash
 g++ emulator/emulator.cpp -o emulator
-./emulator example.o -run        # run the full program
-./emulator example.o -dump       # memory dump
-./emulator example.o -reg        # show registers
-./emulator example.o -read       # show all memory reads
-./emulator example.o -write      # show all memory writes
-UI (optional)
-bash
-Copy
-Edit
+./emulator example.o -run        # Run the full program
+./emulator example.o -dump       # Memory dump
+./emulator example.o -reg        # Show registers
+./emulator example.o -read       # Show all memory reads
+./emulator example.o -write      # Show all memory writes
+```
+
+## Streamlit UI (Optional)
+
+```bash
 streamlit run ui/run_ui.py
-Project Structure
-graphql
-Copy
-Edit
+```
+
+## Project Structure
+
+```
 project_root/
 │
 ├── assembler/             # Two-pass assembler  
@@ -55,10 +45,11 @@ project_root/
 │
 ├── README.md
 └── .gitignore
-Example Program
-asm
-Copy
-Edit
+```
+
+## Example Program
+
+```asm
 ldc 5
 stl 0
 ldc 10
@@ -70,18 +61,27 @@ stl 0
 ldl 5
 stl 1
 HALT
-Output Files
-example.o: Binary object file (32-bit instructions)
+```
 
-example.lst: Instruction listing with addresses
+## Output Files
 
-example.log: Any warnings/errors encountered
+- `example.o`: Binary object file (32-bit instructions)
+- `example.lst`: Instruction listing with addresses
+- `example.log`: Any warnings/errors encountered
 
-Requirements
-C++17 compiler
+## Features
 
-Python 3.8+ (for Streamlit UI)
+- Two-pass assembler with support for 18+ instructions, labels, constants
+- Supports decimal, octal, and hex numbers with 6+ types of error detection
+- Emulator simulates register state, stack operations, memory access, branching
+- Logs all memory read and write operations with detailed info
+- Streamlit UI for uploading `.asm` files, assembling, running, and viewing output interactively
 
-License
+## Requirements
+
+- C++17 compiler
+- Python 3.8+ (for Streamlit UI)
+
+## License
+
 MIT License
-
