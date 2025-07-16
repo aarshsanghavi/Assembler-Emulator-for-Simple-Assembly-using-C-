@@ -138,8 +138,9 @@ void showReadLog() {
 }
 
 void showWriteOperation() {
-    cout << "Write to memory[" << intToHex(memChange[0])
-         << "] = " << intToHex(Memory[memChange[0]]) << endl;
+    cout << "Write to memory[" << intToHex(memChange[0]) << "]\n"
+         << "  Old Value: " << intToHex(memChange[1]) << "\n"
+         << "  New Value: " << intToHex(Memory[memChange[0]]) << endl;
 }
 
 void listInstructions() {
@@ -191,83 +192,68 @@ bool executeCode(int mode, int limit = (1 << 25)) {
     displayRegisters();
     return true;
 }
+void runStepByStep() {
+    execCount = 0;
+    while (PC < instructions.size()) {
+        if (execCount++ > 3e7) {
+            cout << "Segmentation Fault: Instruction limit exceeded.\n";
+            return;
+        }
+
+        uint32_t raw = instructions[PC];
+        int opcode = raw & 0xFF;
+        int operand = (raw >> 8) & 0xFFFFFF;
+        if (operand & (1 << 23)) operand -= (1 << 24);  // sign-extend
+
+        cout << "\nPC = " << intToHex(PC) << ": Executing " << mnemonics[opcode] << " " << operand << endl;
+
+        if (opcode == 18) {
+            cout << "Execution Halted.\n";
+            break;
+        }
+
+        executeInstruction[opcode](operand);
+        incrementPC();
+
+        memoryDump();
+        displayRegisters();
+
+        // cout << "Press Enter to continue...\n";
+        // cin.ignore();
+        // cin.get();
+    }
+}
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        cout << "Usage: " << argv[0] << " <file.o> [command]" << endl;
+    if (argc != 3) {
+        cout << "Usage: " << argv[0] << " <file.o> [-run | -stepfull]\n";
         return 1;
     }
 
     string fileName = argv[1];
+    string command = argv[2];
     loadMachineCode(fileName);
 
-    if (argc == 3) {
-        string command = argv[2];
-        if (command == "-dump") {
-            cout << "\nInitial Memory Dump:\n";
-            memoryDump();
-        }
-        else if (command == "-reg") {
-            displayRegisters();
-        }
-        else if (command == "-t") {
-            executeCode(0, 1);
-        }
-        else if (command == "-run") {
-            cout << "\nInitial Memory Dump:\n";
-            memoryDump();
+    if (command == "-run") {
+        cout << "\nInitial Memory Dump:\n";
+        memoryDump();
 
-            cout << "\n--- Executing Program ---\n";
-            executeCode(0);
+        cout << "\n--- Executing Program ---\n";
+        executeCode(0);  // <- use reusable logic
 
-            cout << "\nFinal Memory Dump:\n";
-            memoryDump();
+        cout << "\nFinal Memory Dump:\n";
+        memoryDump();
 
-            cout << "\nFinal Register State:\n";
-            displayRegisters();
-        }
-        else if (command == "-isa") {
-            listInstructions();
-        }
-        else if (command == "-read") {
-            executeCode(1);  // show all reads
-        }
-        else if (command == "-write") {
-            executeCode(2);  // show writes
-        }
-        else {
-            cerr << "Invalid command: " << command << endl;
-            return 1;
-        }
-    } else {
-        displayInstructions();
-        while (true) {
-            cout << "Enter command or 0 to exit:\n> ";
-            string cmd;
-            cin >> cmd;
+        cout << "\nFinal Register State:\n";
+        displayRegisters();
+    }
 
-            if (cmd == "0") break;
-            else if (cmd == "-dump") memoryDump();
-            else if (cmd == "-reg") displayRegisters();
-            else if (cmd == "-t") executeCode(0, 1);
-            else if (cmd == "-run") {
-                cout << "\nInitial Memory Dump:\n";
-                memoryDump();
-
-                cout << "\n--- Executing Program ---\n";
-                executeCode(0);
-
-                cout << "\nFinal Memory Dump:\n";
-                memoryDump();
-
-                cout << "\nFinal Register State:\n";
-                displayRegisters();
-            }
-            else if (cmd == "-isa") listInstructions();
-            else if (cmd == "-read") executeCode(1);
-            else if (cmd == "-write") executeCode(2);
-            else cout << "Invalid command. Try again.\n";
-        }
+    else if (command == "-stepfull") {
+        runStepByStep();
+    }
+    else {
+        cerr << "Invalid command. Use -run or -stepfull\n";
+        return 1;
     }
 
     return 0;
