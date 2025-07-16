@@ -63,7 +63,12 @@ if uploaded_asm:
 st.header("Step 2: Upload or Use .o File for Emulation")
 
 uploaded_obj = st.file_uploader("Upload `.o` object file (optional)", type=["o"])
-cmd = st.selectbox("Choose emulator command", ["-run", "-t", "-dump", "-reg", "-read", "-write", "-isa"])
+
+# Only allow useful, non-interactive commands
+cmd = st.selectbox(
+    "Choose emulator command",
+    ["-run", "-stepfull"]
+)
 
 if uploaded_obj or 'o_file_content' in st.session_state:
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -90,7 +95,8 @@ if uploaded_obj or 'o_file_content' in st.session_state:
                 st.subheader("Emulator Output")
                 st.code(full_output)
 
-                if cmd == "-run":
+                # Optional parsing logic for -run
+                if cmd in ["-run", "-stepfull"]:
                     init_dump, final_dump, regs = [], [], []
                     section = None
 
@@ -102,7 +108,7 @@ if uploaded_obj or 'o_file_content' in st.session_state:
                         elif "FINAL MEMORY DUMP" in line_upper:
                             section = "final"
                             continue
-                        elif "REGISTERS" in line_upper:
+                        elif "REGISTER" in line_upper:
                             section = "regs"
                             continue
                         elif "EXECUTION HALTED" in line_upper:
