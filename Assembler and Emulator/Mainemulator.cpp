@@ -226,7 +226,7 @@ void runStepByStep() {
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
-        cout << "Usage: " << argv[0] << " <file.o> [-run | -stepfull]\n";
+        cout << "Usage: " << argv[0] << " <file.o> [-run | -stepfull | -read]\n";
         return 1;
     }
 
@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
         memoryDump();
 
         cout << "\n--- Executing Program ---\n";
-        executeCode(0);  // <- use reusable logic
+        executeCode(0);
 
         cout << "\nFinal Memory Dump:\n";
         memoryDump();
@@ -251,8 +251,14 @@ int main(int argc, char* argv[]) {
     else if (command == "-stepfull") {
         runStepByStep();
     }
+
+    else if (command == "-read") {
+        cout << "\n--- Executing Program (Read Mode) ---\n";
+        executeCode(1);  // Mode 1 = collect and print memory reads
+    }
+
     else {
-        cerr << "Invalid command. Use -run or -stepfull\n";
+        cerr << "Invalid command. Use -run, -stepfull, or -read\n";
         return 1;
     }
 
