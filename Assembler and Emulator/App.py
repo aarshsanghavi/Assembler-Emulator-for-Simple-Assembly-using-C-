@@ -67,7 +67,7 @@ uploaded_obj = st.file_uploader("Upload `.o` object file (optional)", type=["o"]
 # Only allow useful, non-interactive commands
 cmd = st.selectbox(
     "Choose emulator command",
-    ["-run", "-stepfull"]
+    ["-run", "-stepfull", "-read"]
 )
 
 if uploaded_obj or 'o_file_content' in st.session_state:
@@ -96,8 +96,8 @@ if uploaded_obj or 'o_file_content' in st.session_state:
                 st.code(full_output)
 
                 # Optional parsing logic for -run
-                if cmd in ["-run", "-stepfull"]:
-                    init_dump, final_dump, regs = [], [], []
+                if cmd in ["-run", "-stepfull", "-read"]:
+                    init_dump, final_dump, regs, reads = [], [], [], []
                     section = None
 
                     for line in full_output.splitlines():
@@ -111,6 +111,8 @@ if uploaded_obj or 'o_file_content' in st.session_state:
                         elif "REGISTER" in line_upper:
                             section = "regs"
                             continue
+                        elif "READ FROM MEMORY[" in line_upper:
+                            section = "reads"
                         elif "EXECUTION HALTED" in line_upper:
                             section = None
 
@@ -120,6 +122,8 @@ if uploaded_obj or 'o_file_content' in st.session_state:
                             final_dump.append(line)
                         elif section == "regs":
                             regs.append(line)
+                        elif section == "reads" and "READ FROM MEMORY" in line.upper():
+                            reads.append(line)
 
                     if init_dump:
                         st.text_area("Initial Memory", "\n".join(init_dump), height=150)
@@ -127,6 +131,9 @@ if uploaded_obj or 'o_file_content' in st.session_state:
                         st.text_area("Final Memory", "\n".join(final_dump), height=150)
                     if regs:
                         st.text_area("Registers", "\n".join(regs), height=100)
+                    if reads:
+                        st.text_area("Memory Reads", "\n".join(reads), height=150)
+
 
             except Exception as e:
                 st.error(f"Emulator failed: {e}")
