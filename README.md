@@ -2,7 +2,7 @@
 
 A comprehensive two-pass assembler and emulator implementation for a custom 32-bit instruction set architecture (ISA), complete with an interactive Streamlit web interface for visualization and debugging.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Architecture](#architecture)
@@ -23,7 +23,7 @@ A comprehensive two-pass assembler and emulator implementation for a custom 32-b
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This project provides a complete toolchain for writing, assembling, and executing programs in a custom assembly language. It simulates a simple stack-based architecture with support for arithmetic operations, memory manipulation, branching, and function calls.
 
@@ -34,7 +34,7 @@ This project provides a complete toolchain for writing, assembling, and executin
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 The emulator simulates a **32-bit stack-based architecture** with the following components:
 
@@ -60,38 +60,38 @@ The emulator simulates a **32-bit stack-based architecture** with the following 
 
 ---
 
-## ✨ Features
+## Features
 
 ### Assembler Features
-- ✅ **Two-pass assembly** for label resolution
-- ✅ **Label support** with colon syntax (`label:`)
-- ✅ **Multiple number formats**: Decimal, Octal (0...), Hexadecimal (0x...)
-- ✅ **Comprehensive error detection** (6+ error types)
-- ✅ **Comment support** using semicolon (`;`)
-- ✅ **SET directive** for assigning values to labels
-- ✅ **data directive** for storing constants
-- ✅ **Generates three output files**: .o (object), .lst (listing), .log (error log)
+- **Two-pass assembly** for label resolution
+- **Label support** with colon syntax (`label:`)
+- **Multiple number formats**: Decimal, Octal (0...), Hexadecimal (0x...)
+- **Comprehensive error detection** (6+ error types)
+- **Comment support** using semicolon (`;`)
+- **SET directive** for assigning values to labels
+- **data directive** for storing constants
+- **Generates three output files**: .o (object), .lst (listing), .log (error log)
 
 ### Emulator Features
-- ✅ **Complete ISA implementation** (19 instructions)
-- ✅ **Multiple execution modes**: full run, step-by-step, read/write tracking
-- ✅ **Memory dump** capabilities
-- ✅ **Register state inspection**
-- ✅ **Memory read/write logging** for debugging
-- ✅ **Stack operations** simulation
-- ✅ **Branch and function call** support
-- ✅ **Overflow protection** (instruction limit: 30 million)
+- **Complete ISA implementation** (19 instructions)
+- **Multiple execution modes**: full run, step-by-step, read/write tracking
+- **Memory dump** capabilities
+- **Register state inspection**
+- **Memory read/write logging** for debugging
+- **Stack operations** simulation
+- **Branch and function call** support
+- **Overflow protection** (instruction limit: 30 million)
 
 ### UI Features
-- 🎨 **Interactive web interface** using Streamlit
-- 📁 **File upload** for .asm and .o files
-- 📊 **Real-time assembly** and execution
-- 📝 **Output visualization** (listing, logs, memory dumps)
-- 🔍 **Parsed output display** (initial/final memory, registers, read operations)
+- **Interactive web interface** using Streamlit
+- **File upload** for .asm and .o files
+- **Real-time assembly** and execution
+- **Output visualization** (listing, logs, memory dumps)
+- **Parsed output display** (initial/final memory, registers, read operations)
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Assembler-Emulator-for-Simple-Assembly-using-C-/
@@ -119,7 +119,7 @@ Assembler-Emulator-for-Simple-Assembly-using-C-/
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 - **C++ Compiler**: GCC/G++ with C++17 support or MSVC (Visual Studio)
@@ -154,7 +154,7 @@ pip install streamlit
 
 ---
 
-## 💻 Usage
+## Usage
 
 ### Using the Assembler
 
@@ -215,7 +215,7 @@ streamlit run App.py
 
 ---
 
-## 🔧 Instruction Set Architecture
+## Instruction Set Architecture
 
 The ISA consists of **19 instructions** with three operand types:
 
@@ -258,7 +258,7 @@ The ISA consists of **19 instructions** with three operand types:
 
 ---
 
-## 📝 Assembly Language Syntax
+## Assembly Language Syntax
 
 ### Basic Syntax Rules
 
@@ -296,7 +296,7 @@ MAX: SET 100         ; Define MAX as 100
 
 ---
 
-## 📚 Examples
+## Examples
 
 ### Example 1: Simple Addition
 ```asm
@@ -374,7 +374,7 @@ end_add:
 
 ---
 
-## 📄 Output Files
+## Output Files
 
 ### 1. Object File (.o)
 - Binary file containing 32-bit machine code instructions
@@ -404,7 +404,7 @@ ERROR: Invalid operand at line number 12
 
 ---
 
-## ⚠️ Error Detection
+## Error Detection
 
 The assembler detects **6 types of errors**:
 
@@ -419,7 +419,7 @@ The assembler detects **6 types of errors**:
 
 ---
 
-## 📦 Requirements
+## Requirements
 
 ### For Compilation
 - **C++17 Compatible Compiler**
@@ -437,26 +437,26 @@ The assembler detects **6 types of errors**:
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Aarsh Sanghavi**  
 Roll No: 2301CS01
 
 ---
 
-## 📝 License
+## License
 
 This project is available for educational purposes. Feel free to use, modify, and distribute with attribution.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 This project was developed as part of a computer architecture and systems programming course, demonstrating the fundamentals of:
 - Assembly language design
@@ -466,4 +466,4 @@ This project was developed as part of a computer architecture and systems progra
 
 ---
 
-**Happy Coding! 🚀**
+**Happy Coding!**
